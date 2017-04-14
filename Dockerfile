@@ -44,11 +44,10 @@ RUN rm -f /etc/opt/remi/php71/php.d/20-mssql.ini && \
     sed -i "s/display_errors =.*/display_errors = Off/" /etc/opt/remi/php71/php.ini && \
     sed -i "s/upload_max_filesize = 2M/upload_max_filesize = 30M/" /etc/opt/remi/php71/php.ini && \
     sed -i -e "s/;daemonize\s*=\s*yes/daemonize = no/g" /etc/opt/remi/php71/php-fpm.conf && \
-    sed -i "s/error_log =.*/;error_log/" /etc/opt/remi/php71/php-fpm.conf && \
+    sed -i "s/error_log =.*/error_log = \/proc\/self\/fd\/2/" /etc/opt/remi/php71/php-fpm.conf && \
     usermod -u 1000 nobody && \
     ln -s /opt/remi/php71/root/usr/sbin/php-fpm /usr/sbin/php-fpm && \
     ln -s /etc/opt/remi/php71/php.ini /etc/php.ini && \
-    mkdir -p /etc/php.d && \
     mkdir -p /etc/php-fpm.d && \
     ln -s /etc/opt/remi/php71/php-fpm.d/www.conf /etc/php-fpm.d/www.conf && \
     ln -s /etc/opt/remi/php71/php.d /etc/php.d && \
