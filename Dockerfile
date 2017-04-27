@@ -33,8 +33,8 @@ RUN echo 'http://dl-cdn.alpinelinux.org/alpine/edge/testing' >> /etc/apk/reposit
         php7-zip \
         php7-zlib \
     && rm -rf /var/cache/apk/* \
-    curl -sS https://getcomposer.org/installer | php7 -- --install-dir=/usr/local/bin --filename=composer && \
-    composer global require "hirak/prestissimo:^0.3" && \
+    && curl -sS https://getcomposer.org/installer | php7 -- --install-dir=/usr/local/bin --filename=composer \
+    && composer global require "hirak/prestissimo:^0.3" \
     && chmod +x /opt/run.sh
 
 COPY ./php.ini /etc/php7/conf.d/50-setting.ini
