@@ -1,21 +1,20 @@
 FROM php:7.1-fpm-alpine
 
-ENV MEMCACHED_DEPS zlib-dev libmemcached-dev cyrus-sasl-dev git
+ENV TEMP_DEPS zlib-dev libmemcached-dev cyrus-sasl-dev git sqlite-dev libmcrypt-dev openssh-client g++ make autoconf
 
 RUN apk update \
-    && apk add  --no-cache git sqlite-dev curl libmcrypt libmcrypt-dev openssh-client \
-        g++ make autoconf libmemcached \
+    && apk add --no-cache --virtual .temp-deps $TEMP_DEPS \
+    && apk add  --no-cache libmemcached libmcrypt curl \
     && docker-php-source extract \
     && pecl install xdebug \
     && docker-php-ext-install mcrypt pdo_mysql pdo_sqlite \
     && docker-php-ext-enable xdebug \
     && docker-php-source delete \
-    && apk add --no-cache --virtual .memcached-deps $MEMCACHED_DEPS \
     && git clone -b php7 https://github.com/php-memcached-dev/php-memcached /usr/src/php/ext/memcached \
     && docker-php-ext-configure /usr/src/php/ext/memcached --disable-memcached-sasl \
     && docker-php-ext-install /usr/src/php/ext/memcached \
     && rm -rf /usr/src/php/ext/memcached \
-    && apk del .memcached-deps \
+    && apk del .temp-deps \
     && echo "xdebug.remote_autostart=on" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
     && echo "xdebug.remote_enable=on" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
     && echo "xdebug.remote_handler=dbgp" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
@@ -26,7 +25,9 @@ RUN apk update \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
     && rm -rf /tmp/*
 
-COPY docker-entry-point.sh /usr/local/bin/
+COPY ./docker-entry-point.sh /usr/local/bin/
+
+WORKDIR /var/html/public
 
 ENTRYPOINT ["docker-entry-point.sh"]
 CMD ["php-fpm"]
