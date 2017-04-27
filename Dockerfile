@@ -1,10 +1,10 @@
 FROM php:7.1-fpm-alpine
 
-ENV TEMP_DEPS zlib-dev libmemcached-dev cyrus-sasl-dev git sqlite-dev libmcrypt-dev openssh-client g++ make autoconf
+ENV TEMP_DEPS zlib-dev libmemcached-dev cyrus-sasl-dev sqlite-dev libmcrypt-dev g++ make autoconf
 
 RUN apk update \
     && apk add --no-cache --virtual .temp-deps $TEMP_DEPS \
-    && apk add  --no-cache libmemcached libmcrypt curl \
+    && apk add  --no-cache libmemcached libmcrypt curl openssh-client git \
     && docker-php-source extract \
     && pecl install xdebug \
     && docker-php-ext-install mcrypt pdo_mysql pdo_sqlite \
@@ -25,9 +25,9 @@ RUN apk update \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
     && rm -rf /tmp/*
 
-COPY ./docker-entry-point.sh /usr/local/bin/
+VOLUME /var/www
 
-WORKDIR /var/html/public
+COPY docker-entrypoint.sh /usr/local/bin/
 
-ENTRYPOINT ["docker-entry-point.sh"]
+ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["php-fpm"]
