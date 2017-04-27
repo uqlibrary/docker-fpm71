@@ -25,3 +25,8 @@ RUN apk update \
     && echo "xdebug.idekey=PHPSTORM" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
     && rm -rf /tmp/*
+
+COPY docker-entry-point.sh /usr/local/bin/
+
+ENTRYPOINT ["docker-entry-point.sh"]
+CMD ["php-fpm"]
