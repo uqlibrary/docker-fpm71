@@ -2,6 +2,8 @@ FROM php:7.1-fpm-alpine
 
 ENV TEMP_DEPS zlib-dev libmemcached-dev cyrus-sasl-dev sqlite-dev libmcrypt-dev g++ make autoconf
 
+COPY ./docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+
 RUN apk update \
     && apk add --no-cache --virtual .temp-deps $TEMP_DEPS \
     && apk add  --no-cache libmemcached libmcrypt curl openssh-client git \
@@ -23,11 +25,12 @@ RUN apk update \
     && echo "xdebug.remote_port=9000" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
     && echo "xdebug.idekey=PHPSTORM" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
-    && rm -rf /tmp/*
+    && rm -rf /tmp/* \
+    && chmod +x /usr/local/bin/docker-entrypoint.sh
 
 VOLUME /var/www
 
-COPY docker-entrypoint.sh /usr/local/bin/
-
 ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["php-fpm"]
+
+WORKDIR /var/www
