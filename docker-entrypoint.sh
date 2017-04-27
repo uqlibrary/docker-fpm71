@@ -6,4 +6,4 @@ then
     /opt/bootstrap.sh
 fi
 
-exec "$@"
+exec /usr/sbin/php-fpm7 -R --nodaemonize
