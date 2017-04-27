@@ -2,7 +2,7 @@ FROM alpine:edge
 
 ENV COMPOSER_VERSION=1.4.1
 ENV XDEBUG_VERSION=2.5.3
-ENV BUILD_DEPS autoconf make g++ gcc
+ENV BUILD_DEPS autoconf make g++ gcc groff less py-pip
 
 COPY ./docker-entrypoint.sh /usr/sbin/docker-entrypoint.sh
 
@@ -13,7 +13,7 @@ RUN echo "http://dl-4.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositor
     php7-mbstring php7-opcache php7-openssl php7-pdo_mysql php7-pdo_sqlite \
     php7-xmlwriter php7-phar php7-session php7-xml php7-mcrypt \
     php7-zip php7-zlib php7-fpm php7-dev php7-pear php7-memcached \
-    wget curl \
+    wget curl python \
 
     # Build deps
     && apk add --no-cache --virtual .build-deps $BUILD_DEPS \
@@ -30,9 +30,12 @@ RUN echo "http://dl-4.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositor
     && curl -sS https://getcomposer.org/installer | php7 -- --install-dir=/usr/bin --filename=composer --version=${COMPOSER_VERSION} \
     && composer global require "hirak/prestissimo:0.3.5" \
 
+    # AWS CLI
+    && pip install awscli \
+
     # Remove build deps
     && rm -rf /var/cache/apk/* \
-    && apk del .build-deps \
+    && apk --purge del .build-deps \
 
     && chmod +x /usr/sbin/docker-entrypoint.sh
 
