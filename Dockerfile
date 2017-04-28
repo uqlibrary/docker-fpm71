@@ -4,7 +4,8 @@ ENV COMPOSER_VERSION=1.4.1
 ENV XDEBUG_VERSION=2.5.3
 ENV BUILD_DEPS autoconf make g++ gcc groff less py-pip
 
-COPY ./docker-entrypoint.sh /usr/sbin/docker-entrypoint.sh
+COPY ./fs/docker-entrypoint.sh /usr/sbin/docker-entrypoint.sh
+COPY ./fs/newrelic-install.sh /usr/sbin/newrelic-install.sh
 
 RUN echo "http://dl-4.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
     # Required deps
@@ -37,7 +38,8 @@ RUN echo "http://dl-4.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositor
     && rm -rf /var/cache/apk/* \
     && apk --purge del .build-deps \
 
-    && chmod +x /usr/sbin/docker-entrypoint.sh
+    && chmod +x /usr/sbin/docker-entrypoint.sh \
+    && chmod +x /usr/sbin/newrelic-install.sh
 
 ADD fs /
 
