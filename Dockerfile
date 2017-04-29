@@ -13,7 +13,7 @@ RUN echo "http://dl-4.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositor
     php7 php7-ctype php7-curl php7-json php7-mysqli php7-dom php7-sockets \
     php7-mbstring php7-opcache php7-openssl php7-pdo_mysql php7-pdo_sqlite \
     php7-xmlwriter php7-phar php7-session php7-xml php7-mcrypt \
-    php7-zip php7-zlib php7-fpm php7-dev php7-pear php7-memcached \
+    php7-zip php7-zlib php7-fpm php7-dev php7-pear php7-memcached php7-soap \
     wget curl python \
 
     # Build deps
