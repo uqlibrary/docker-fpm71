@@ -1,20 +1,18 @@
-FROM alpine:edge
+FROM uqlibrary/alpine:latest
 
 ENV COMPOSER_VERSION=1.4.1
 ENV XDEBUG_VERSION=2.5.3
-ENV BUILD_DEPS autoconf make g++ gcc groff less py-pip
+ENV BUILD_DEPS autoconf make g++ gcc groff less
 
 COPY ./fs/docker-entrypoint.sh /usr/sbin/docker-entrypoint.sh
 COPY ./fs/newrelic-install.sh /usr/sbin/newrelic-install.sh
 
-RUN echo "http://dl-4.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
+RUN apk add --upgrade --no-cache \
     # Required deps
-    && apk add --update \
     php7 php7-ctype php7-curl php7-json php7-mysqli php7-dom php7-sockets \
     php7-mbstring php7-opcache php7-openssl php7-pdo_mysql php7-pdo_sqlite \
     php7-xmlwriter php7-phar php7-session php7-xml php7-mcrypt \
     php7-zip php7-zlib php7-fpm php7-dev php7-pear php7-memcached php7-soap \
-    wget curl python \
 
     # Build deps
     && apk add --no-cache --virtual .build-deps $BUILD_DEPS \
@@ -31,12 +29,9 @@ RUN echo "http://dl-4.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositor
     && curl -sS https://getcomposer.org/installer | php7 -- --install-dir=/usr/bin --filename=composer --version=${COMPOSER_VERSION} \
     && composer global require "hirak/prestissimo:0.3.5" \
 
-    # AWS CLI
-    && pip install awscli \
-
     # Remove build deps
     && rm -rf /var/cache/apk/* \
-    && apk --purge del .build-deps \
+    && apk del --purge .build-deps \
 
     && chmod +x /usr/sbin/docker-entrypoint.sh \
     && chmod +x /usr/sbin/newrelic-install.sh
