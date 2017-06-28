@@ -6,7 +6,7 @@ export NR_INSTALL_SILENT=1
 export NR_INSTALL_PHPLIST=/usr/bin
 export NR_INSTALL_KEY="${NEWRELIC_LICENSE}"
 
-NEWRELIC_VERSION="7.2.0.191"
+NEWRELIC_VERSION="7.3.1.197"
 cd /tmp
 wget -q https://download.newrelic.com/php_agent/release/newrelic-php5-${NEWRELIC_VERSION}-linux-musl.tar.gz
 tar -zxf newrelic-php5-${NEWRELIC_VERSION}-linux-musl.tar.gz
