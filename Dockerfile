@@ -13,7 +13,7 @@ RUN apk add --upgrade --no-cache \
     php7-mbstring php7-opcache php7-openssl php7-pdo_mysql php7-pdo_sqlite \
     php7-xmlwriter php7-phar php7-session php7-xml php7-mcrypt \
     php7-zip php7-zlib php7-fpm php7-dev php7-pear php7-memcached php7-soap \
-    php7-simplexml php7-tokenizer php7-gd \
+    php7-simplexml php7-tokenizer php7-gd php7-ldap \
 
     # Build deps
     && apk add --no-cache --virtual .build-deps $BUILD_DEPS \
