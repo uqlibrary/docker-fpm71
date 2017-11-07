@@ -1,5 +1,7 @@
 FROM uqlibrary/docker-base:13
 
+ENV COMPOSER_VERSION=1.5.2
+
 RUN rpm -Uvh http://yum.newrelic.com/pub/newrelic/el5/x86_64/newrelic-repo-5-3.noarch.rpm
 
 #Enable the ius testing and disable mirrors to ensure getting latest, not an out of date mirror
@@ -52,7 +54,8 @@ RUN rm -f /etc/opt/remi/php71/php.d/20-mssql.ini && \
     mkdir -p /etc/php-fpm.d && \
     ln -s /etc/opt/remi/php71/php-fpm.d/www.conf /etc/php-fpm.d/www.conf && \
     ln -s /etc/opt/remi/php71/php.d /etc/php.d && \
-    ln -s /opt/remi/php71/root/bin/php /usr/bin/php
+    ln -s /opt/remi/php71/root/bin/php /usr/bin/php && \
+    curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer --version=${COMPOSER_VERSION}
 
 EXPOSE 9000
 
