@@ -23,6 +23,7 @@ RUN yum update -y && \
     php71-php-pecl-geoip \
     php71-php-pecl-memcached \
     php71-php-pecl-xdebug \
+    php71-php-pecl-zip \
     php71-php-pgsql \
     php71-php-soap \
     php71-php-xmlrpc \
