@@ -1,4 +1,4 @@
-FROM uqlibrary/centos:2
+FROM uqlibrary/centos:3
 
 ENV COMPOSER_VERSION=1.6.5
 
